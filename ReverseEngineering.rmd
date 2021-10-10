@@ -1,0 +1,29 @@
+---
+title: "NC-Ban"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This file is to analyze the data provided by WRAL in NC regarding donations that should have been banned.
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse.
+library(tidyverse)
+```
+
+## Load the donation data
+
+
+```{r}
+donation <- read_csv('donors0103-0701.csv')
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
