@@ -17,13 +17,71 @@ options(scipen=999)
 
 # Load the tidyverse.
 library(tidyverse)
+#library(lubridate)
 ```
 
 ## Load the donation data
 
 
 ```{r}
-donation <- read_csv('donors0103-0701.csv')
+donation <- read_csv('donors0103-0701-csv-2.csv')
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+##
+# Look at donations during the session ban season (when the assembly is in session, 05/18/2018-06/29/2018)
+
+```{r}
+ session_donation <- donation %>%
+  mutate(cleandate= as.Date(date, "%m/%d/%Y")) %>%
+  mutate(amount = as.numeric(str_remove_all(amount, "[$,]")))  %>%
+  filter(source == "candidates"|| source == "parties") %>%
+  filter(cleandate >= as.Date("0018-05-18", "%Y-%m-%d")) %>%
+  filter(cleandate <= as.Date("0018-06-29", "%Y-%m-%d"))
+
+# Who donated the most in total?
+session_donation %>%
+  group_by(name_clean) %>%
+  summarise(
+    total=sum(amount)
+  ) %>%
+  arrange(desc(total))
+
+
+```
+# Look at donations during the session ban season plus the week prior (when the assembly is in session, 05/11/2018-06/29/2018)
+
+```{r}
+ prior_week_and_session_donation <- donation %>%
+  mutate(cleandate= as.Date(date, "%m/%d/%Y")) %>%
+  mutate(amount = as.numeric(str_remove_all(amount, "[$,]")))  %>%
+  filter(source == "candidates" || source == "parties") %>%
+  filter(cleandate >= as.Date("0018-05-11", "%Y-%m-%d")) %>%
+  filter(cleandate <= as.Date("0018-06-29", "%Y-%m-%d"))
+ 
+# Who donated the most in total?
+prior_week_and_session_donation %>%
+  group_by(name_clean) %>%
+  summarise(
+    total=sum(amount)
+  ) %>%
+  arrange(desc(total))
+
+
+```
+#
+What was the total amount donated to candidates during the time assembly was in session?
+Sum donations to candidates (and not parties)
+#
+```{r}
+donation %>%
+  mutate(cleandate= as.Date(date, "%m/%d/%Y")) %>%
+  mutate(amount = as.numeric(str_remove_all(amount, "[$,]")))  %>%
+  filter(source == "candidates") %>%
+  filter(cleandate >= as.Date("0018-05-18", "%Y-%m-%d")) %>%
+  filter(cleandate <= as.Date("0018-06-29", "%Y-%m-%d")) %>%
+  summarise(
+    total=sum(amount)
+  )
+
+```
