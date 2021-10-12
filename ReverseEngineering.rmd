@@ -35,7 +35,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
  session_donation <- donation %>%
   mutate(cleandate= as.Date(date, "%m/%d/%Y")) %>%
   mutate(amount = as.numeric(str_remove_all(amount, "[$,]")))  %>%
-  filter(source == "candidates"|| source == "parties") %>%
+  filter(source == "candidates" | source == "parties") %>%
   filter(cleandate >= as.Date("0018-05-18", "%Y-%m-%d")) %>%
   filter(cleandate <= as.Date("0018-06-29", "%Y-%m-%d"))
 
@@ -46,6 +46,16 @@ session_donation %>%
     total=sum(amount)
   ) %>%
   arrange(desc(total))
+
+# Pick out the records for the 2 Monarch Capital executives
+session_donation %>%
+  group_by(name_clean) %>%
+  summarise(
+    total=sum(amount)
+  ) %>%
+  arrange(desc(total)) %>%
+  filter(name_clean == "GEORGE LEWIS STROBEL II" | name_clean == "ROBIN E DELMER") %>%
+  mutate(sum=sum(total))
 
 
 ```
@@ -67,11 +77,20 @@ prior_week_and_session_donation %>%
   ) %>%
   arrange(desc(total))
 
-
+# How much from George Strobel and Robin Delmer?
+prior_week_and_session_donation %>%
+  group_by(name_clean) %>%
+  summarise(
+    total=sum(amount)
+  ) %>%
+  arrange(desc(total)) %>%
+  filter(name_clean == "GEORGE LEWIS STROBEL II" | name_clean == "ROBIN E DELMER")%>%
+  mutate(sum=sum(total))
 ```
 #
-What was the total amount donated to candidates during the time assembly was in session?
-Sum donations to candidates (and not parties)
+# Statement 3
+“This year's legislative session also saw significant donations from hog farmers and beer distributors, both industries with important legislation before the General Assembly. Senate President Pro Tem  Phil Berger's campaign alone raised nearly $222,000 during session. Twenty-three people gave him the maximum allowed: $5,200.”What was the total amount donated to candidates during the time assembly was in session?
+Sum donations to candidate "PHIL E BERGER" (and not parties)
 #
 ```{r}
 donation %>%
@@ -80,8 +99,65 @@ donation %>%
   filter(source == "candidates") %>%
   filter(cleandate >= as.Date("0018-05-18", "%Y-%m-%d")) %>%
   filter(cleandate <= as.Date("0018-06-29", "%Y-%m-%d")) %>%
+  filter(committee_name == "PHILIP E BERGER COMM") %>%
   summarise(
     total=sum(amount)
   )
 
+```
+
+
+# What industries/companies did these contributions to Phil Berger?
+#
+```{r}
+session_donation %>%
+  filter(committee_name == "PHILIP E BERGER COMM") %>%
+  group_by(clean_employer) %>%
+  summarise(total=sum(amount)) %>%
+  mutate(sum=sum(total)) %>%
+  arrange((clean_employer))
+```
+# How many donated the maximum allowed ($5200)?
+#
+```{r}
+session_donation %>%
+  filter(committee_name == "PHILIP E BERGER COMM") %>%
+  filter(amount == 5200)
+```
+# Queston 4
+“All told during the six-week General Assembly session, more than $1.1 million flowed into state legislators' campaign accounts. That's a conservative figure, reached by backing out money that simply flowed from one politician's campaign to another and money elected officials put into their own campaigns.”
+
+```{r}
+
+
+session_donation %>%
+  filter(source == "candidates") %>%
+  group_by(committee_name) %>%
+  summarise(total=sum(amount)) %>%
+  mutate(sum=sum(total)) %>%
+  arrange(desc(total))
+```
+# Number 5
+I am changing it to 
+"This year, 18 of the top 20 donors to legislators during the week before session were PACs. The other two were Strobel and Delmer."
+I want to filter out all donations the week before session and then pull out the top 20 donors that week.
+
+```{r}
+# Pull out the donations from 05/11 through 05/17 inclusive
+
+prior_week_donation <- donation %>%
+  mutate(cleandate= as.Date(date, "%m/%d/%Y")) %>%
+  mutate(amount = as.numeric(str_remove_all(amount, "[$,]")))  %>%
+  filter(source == "candidates" ) %>%
+  filter(cleandate >= as.Date("0018-05-11", "%Y-%m-%d")) %>%
+  filter(cleandate <= as.Date("0018-05-17", "%Y-%m-%d"))
+
+# Group by and sum by donor
+prior_week_donation %>%
+  group_by(name_clean, transaction_type) %>%
+  summarise(
+    total=sum(amount)
+  ) %>%
+  arrange(desc(total)) %>%
+  head(20)
 ```
