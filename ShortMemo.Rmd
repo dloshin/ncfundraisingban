@@ -1,0 +1,26 @@
+---
+title: "Short Memo"
+author: "David Loshin"
+date: "10/31/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+WRAL’s Story on Heavy Level of Campaign Contributions during the Legislative Session – Short Memo
+In this story produced by WRAL in Raleigh, NC, the main finding is that although the law forbids campaign donations to campaign committees for General Assembly members from lobbyists and the entities that hire them while the Assembly is in session, a loophole allows CEOs and other top executives to contribute to campaigns during General Assembly sessions. This includes top executives of those same lobbyist firms that are banned under the aforementioned law.
+The reporter relied on analyzing campaign finance reportsfiled with the State Board of Elections and Ethics Enforcement for the first and second quarters of 2018 as of mid-July, which encompassed the time frame for the General Assembly session. The reporter highlighted three key points:
+1.	Individuals nominally representing special interests who should be prevented from contributing to campaigns during the Assembly session were doing so because of a loophole.
+2.	There were certain legislators who seemed to benefit from these contributions.
+3.	There were specific special interests represented including solar tax credits, beer and wine wholesalers, and hog farmers.
+To bring the story to life, the reporter used a combination of discussion in the text of newsworthy notes (such as individuals who had donated significant amounts during the Assembly session and assembly members who had been the recipients of large amounts) along with a single visualization displaying the running total of contributions across the time frame that was reviewed. 
+One might infer that the reporter used the data as a tool to find the story. The campaign finance data was subjected to (basic) aggregation and sorting, with the specific individuals discussed in the story bubbling up to the top, which might have triggered further review to determine whether the contributions were or were not appropriate. However, what I found interesting was that what I might take away as the implications of what was being reported seemed to deserve a greater degree of outrage than how I read the story. Instead of bringing the story to life (“special interests are donating money while laws are being passed”), it all seemed to have been presented in a rather matter-of-fact way. 
+This story could have been improved to provide additional context about potential reasons that the identified special interests were so keen to exert a degree of influence during session. The reporter notes that there was important legislation before the GA in the hog farmer and beer distributor industries, but did not provide additional insight into details about the legislation or why the named legislators were the beneficiaries of this largesse.
+The reporter did provide a description of where the data came from (campaign finance reports), partly how the analysis was performed (“focused our analysis on donations to candidate committees for members of the General Assembly” but no further elaboration), and that there were anomalies/variations in the data that needed to be addressed using OpenRefine. They did not reveal the specific queries or cod they used, but it was pretty straightforward to figure out what they did (except for the chart). 
+Not only did the reporter indicate the source of the data and provide a hyperlink, he also produced a link to a GitHub repository with the data used. That made it relatively easy to replicate a selected set of queries/analyses and produce the same results. I selected five statements in the article to supplicate. To do so, I copied the data from the GitHub repository, reviewed the data in excel, and then uploaded the data to OpenRefine to try to address the name variations noted by the reporter. Once I had a working version of the data, I downloaded the cleansed version and wrote R code to do the aggregations and sorting. I do admit that I did not have the same results in one of the statements ("This year, 18 of the top 20 donors to legislators during the week before session were PACs. The other two were Strobel and Delmer.") – I found that there were more than just those two individuals. Since I did attempt to copy what the reporter said, I was a bit surprised that I ended up with different results. However, this suggests one of two things: either that the story did not provide enough detail to allow me to replicate the findings, or I somehow misinterpreted what the reporter did. 
+
+
